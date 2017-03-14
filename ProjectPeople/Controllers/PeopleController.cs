@@ -4,8 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using ProjectPeople.API.Extensions;
+using ProjectPeople.API.Responses;
+using ProjectPeople.API.Responses.IResponses;
 using ProjectPeople.Domain.Entities;
 using ProjectPeople.Domain.Interfaces.IServices;
+using ProjectPeople.Responses;
 
 namespace ProjectPeople.Controllers
 {
@@ -17,26 +21,116 @@ namespace ProjectPeople.Controllers
         {
             _servicePeople = servicePeople;
         }
+        
 
-        // GET api/values
         [HttpGet]
-        public async Task<List<Person>> Get()
+        public async Task<IActionResult> Get(string id)
         {
-            var model = await _servicePeople.Find(FilterDefinition<Person>.Empty);
+            var response = new SingleResponseModel<Person>() as ISingleResponseModel<Person>;
 
-            return model.ToList();
+            try
+            {
+                var entity = await _servicePeople.Get(new FilterDefinitionBuilder<Person>().Where(x => x.Id == id));
+
+                response.Model = entity;
+            }
+            catch (Exception ex)
+            {
+                response.DidError = true;
+                response.ErrorMessage = ex.Message;
+            }
+
+            return response.ToHttpResponse();
         }
 
-        // GET api/values/5
         [HttpGet]
-        public async Task<Person> Bla()
+        public async Task<IActionResult> List()
         {
-            var add = new Person() {Age = 23, Email = "teste2@teste.com", Name = "Teste2"};
+            var response = new ListResponseModel<Person>() as IListResponseModel<Person>;
 
-            var model = await _servicePeople.Insert(add);
+            try
+            {
+                var entity = await _servicePeople.Find(FilterDefinition<Person>.Empty);
 
-            return model;
+                response.Model = entity;
+            }
+            catch (Exception ex)
+            {
+                response.DidError = true;
+                response.ErrorMessage = ex.Message;
+            }
+
+            return response.ToHttpResponse();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Add(Person person)
+        {
+            var response = new SingleResponseModel<Person>() as ISingleResponseModel<Person>;
+
+            try
+            {
+                var entity = await _servicePeople.Insert(person);
+
+                response.Model = entity;
+            }
+            catch (Exception ex)
+            {
+                response.DidError = true;
+                response.ErrorMessage = ex.Message;
+            }
+
+            return response.ToHttpResponse();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(Person person)
+        {
+            var response = new SingleResponseModel<Person>() as ISingleResponseModel<Person>;
+
+            try
+            {
+                var entity = await _servicePeople.Update(person);
+
+                if (entity == null)
+                {
+                    response.Message = "Bla bla bla";
+                }
+
+                response.Model = entity;
+            }
+            catch (Exception ex)
+            {
+                response.DidError = true;
+                response.ErrorMessage = ex.Message;
+            }
+
+            return response.ToHttpResponse();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var response = new SingleResponseModel<Person>() as ISingleResponseModel<Person>;
+
+            try
+            {
+                var entity = await _servicePeople.Delete(id);
+
+                if (entity == null)
+                {
+                    response.Message = "Bla bla bla";
+                }
+
+                response.Model = entity;
+            }
+            catch (Exception ex)
+            {
+                response.DidError = true;
+                response.ErrorMessage = ex.Message;
+            }
+
+            return response.ToHttpResponse();
+        }
     }
 }
