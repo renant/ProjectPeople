@@ -14,7 +14,7 @@ namespace ProjectPeople.Infra.Repositories
     {
         private readonly IMongoCollection<TEntity> _collection;
 
-        public RepositoryBase(MongoClient client)
+        public RepositoryBase(IMongoClient client)
         {
             var database = client.GetDatabase("mydatabase");
             _collection = database.GetCollection<TEntity>(typeof(TEntity).Name);

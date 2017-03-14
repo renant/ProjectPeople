@@ -15,7 +15,11 @@ namespace ProjectPeople.API.Extensions
                 status = HttpStatusCode.InternalServerError;
 
             else if (response.Model == null)
+            {
                 status = HttpStatusCode.NoContent;
+                response.Message = "No Content";
+            }
+                
 
             return new ObjectResult(response) { StatusCode = (int)status };
         }
@@ -28,7 +32,11 @@ namespace ProjectPeople.API.Extensions
                 status = HttpStatusCode.InternalServerError;
 
             else if (response.Model == null)
+            {
                 status = HttpStatusCode.NotFound;
+                response.Message = "Not Found";
+            }
+                
 
             return new ObjectResult(response) { StatusCode = (int)status };
         }

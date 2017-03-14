@@ -92,11 +92,6 @@ namespace ProjectPeople.Controllers
             {
                 var entity = await _servicePeople.Update(person);
 
-                if (entity == null)
-                {
-                    response.Message = "Bla bla bla";
-                }
-
                 response.Model = entity;
             }
             catch (Exception ex)
@@ -116,11 +111,6 @@ namespace ProjectPeople.Controllers
             try
             {
                 var entity = await _servicePeople.Delete(id);
-
-                if (entity == null)
-                {
-                    response.Message = "Bla bla bla";
-                }
 
                 response.Model = entity;
             }
