@@ -20,11 +20,11 @@ namespace ProjectPeople.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<Person> Get()
+        public async Task<List<Person>> Get()
         {
-            var model = await _servicePeople.Get(FilterDefinition<Person>.Empty);
+            var model = await _servicePeople.Find(FilterDefinition<Person>.Empty);
 
-            return model;
+            return model.ToList();
         }
 
         // GET api/values/5
