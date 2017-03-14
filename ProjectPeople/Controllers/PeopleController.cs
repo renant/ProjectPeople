@@ -64,7 +64,7 @@ namespace ProjectPeople.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Person person)
+        public async Task<IActionResult> Add([FromBody]Person person)
         {
             var response = new SingleResponseModel<Person>() as ISingleResponseModel<Person>;
 
@@ -84,7 +84,7 @@ namespace ProjectPeople.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(Person person)
+        public async Task<IActionResult> Update([FromBody]Person person)
         {
             var response = new SingleResponseModel<Person>() as ISingleResponseModel<Person>;
 

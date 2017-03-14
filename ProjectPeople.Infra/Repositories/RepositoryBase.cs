@@ -22,16 +22,9 @@ namespace ProjectPeople.Infra.Repositories
 
         public virtual async Task<TEntity> Get(FilterDefinition<TEntity> filter, CancellationToken cancellationToken = default(CancellationToken))
         {
-            try
-            {
-                var model = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
-                return model;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+            var model = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
+            return model;
 
         }
 
@@ -49,8 +42,8 @@ namespace ProjectPeople.Infra.Repositories
             entity.CreatedDate = DateTime.UtcNow;
             entity.UpdatedDate = DateTime.UtcNow;
 
-            await _collection.InsertOneAsync(entity, cancellationToken);
-            
+            await _collection.InsertOneAsync(entity, new InsertOneOptions(), cancellationToken);
+
             return entity;
         }
 
@@ -60,9 +53,9 @@ namespace ProjectPeople.Infra.Repositories
 
             entity.UpdatedDate = DateTime.UtcNow;
 
-            await _collection.ReplaceOneAsync(idFilter, entity,null,cancellationToken);
+            await _collection.ReplaceOneAsync(idFilter, entity, null, cancellationToken);
 
-            return entity;
+            return await Get(idFilter, cancellationToken);
         }
 
         public virtual async Task<TEntity> Delete(string id, CancellationToken cancellationToken = default(CancellationToken))

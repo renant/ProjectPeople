@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using Newtonsoft.Json.Serialization;
 using ProjectPeople.Domain.Entities;
 using ProjectPeople.Domain.Interfaces.IRepositories;
 using ProjectPeople.Domain.Interfaces.IServices;
@@ -34,9 +35,11 @@ namespace ProjectPeople
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc();
-            services.AddSingleton(new MongoClient(Configuration.GetSection("Mongo").GetSection("ConnectionString").Value));
+            services.AddMvc()
+                    .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
+            services.AddSingleton(new MongoClient(Configuration.GetSection("Mongo").GetSection("ConnectionString").Value));
+           
 
             //Services
             services.AddTransient<IServicePeople, ServicePeople>();
