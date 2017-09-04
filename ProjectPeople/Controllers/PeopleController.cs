@@ -26,7 +26,7 @@ namespace ProjectPeople.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(string id)
         {
-            var response = new SingleResponseModel<Person>() as ISingleResponseModel<Person>;
+            var response = new SingleResponseModel<Person>();
 
             try
             {
@@ -46,7 +46,7 @@ namespace ProjectPeople.Controllers
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var response = new ListResponseModel<Person>() as IListResponseModel<Person>;
+            var response = new ListResponseModel<Person>();
 
             try
             {
